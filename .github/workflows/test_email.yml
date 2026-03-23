@@ -1,0 +1,26 @@
+name: 📧 Test Courriel
+
+on:
+  workflow_dispatch: # Lancement manuel seulement
+
+jobs:
+  send-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Télécharger le code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 📦 Installer les dépendances
+        run: pip install requests
+
+      - name: 📧 Envoyer le courriel de test
+        env:
+          OUTLOOK_EMAIL: ${{ secrets.OUTLOOK_EMAIL }}
+          OUTLOOK_PASSWORD: ${{ secrets.OUTLOOK_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: python test_email.py
