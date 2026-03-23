@@ -1,0 +1,30 @@
+name: 🎮 Lenovo Legion Monitor
+
+on:
+  schedule:
+    # Toutes les heures (minute 0)
+    - cron: "0 * * * *"
+  workflow_dispatch: # Permet aussi de lancer manuellement
+
+jobs:
+  check-availability:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Télécharger le code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 📦 Installer les dépendances
+        run: pip install requests beautifulsoup4
+
+      - name: 🔍 Vérifier la disponibilité Lenovo
+        env:
+          OUTLOOK_EMAIL: ${{ secrets.OUTLOOK_EMAIL }}
+          OUTLOOK_PASSWORD: ${{ secrets.OUTLOOK_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: python check_lenovo.py
